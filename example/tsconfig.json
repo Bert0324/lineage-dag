@@ -6,6 +6,9 @@
     "target": "es5",
     "jsx": "react",
     "allowJs": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": false
   }
 }

@@ -6,7 +6,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    app: './index.jsx'
+    app: './index.tsx'
   },
   output: {
     filename: '[name].js',
@@ -98,6 +98,6 @@ module.exports = {
     inline: true, // 实时刷新
     index: 'index.html',
     port: 8080,
-    open: true
+    open: true,
   }
 };

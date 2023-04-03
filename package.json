@@ -22,14 +22,15 @@
   "author": "无惟",
   "license": "MIT",
   "dependencies": {
-    "butterfly-dag": "^4.2.0"
+    "butterfly-dag": "^4.2.0",
+    "jquery": "^3.6.4"
   },
   "peerDependencies": {
-    "react": ">15.6.1",
-    "react-dom": ">15.6.1",
-    "lodash": "^4.17.20",
+    "butterfly-dag": ">=4.0.0",
     "jquery": ">3.5.1",
-    "butterfly-dag": ">=4.0.0"
+    "lodash": "^4.17.20",
+    "react": ">15.6.1",
+    "react-dom": ">15.6.1"
   },
   "devDependencies": {
     "@babel/core": "~7.12.0",

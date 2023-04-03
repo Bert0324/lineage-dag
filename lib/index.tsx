@@ -5,8 +5,8 @@ import './index.less';
 import 'butterfly-dag/dist/index.css';
 import * as _ from 'lodash';
 import LineageCanvas from './canvas/canvas';
-import {transformInitData, transformEdges, diffPropsData, updateCanvasData, diffActionMenuData} from './adaptor';
-import ActionMenu, {action} from './component/action-menu';
+import { transformInitData, transformEdges, diffPropsData, updateCanvasData, diffActionMenuData } from './adaptor';
+import ActionMenu, { action } from './component/action-menu';
 
 interface ComProps {
   width?: number | string,
@@ -16,7 +16,7 @@ interface ComProps {
   className?: string,
   actionMenu: action[],                              // action菜单
   config?: {
-    titleRender: (node:ITable) => void,              // 自定义节点的title render
+    titleRender: (node: ITable) => void,              // 自定义节点的title render
     showActionIcon?: boolean,                        // 是否展示操作icon：放大，缩小，聚焦
     enableHoverChain: boolean,                       // 是否开启hover高亮血缘链路
     minimap?: {                                      // 是否开启缩略图
@@ -139,7 +139,7 @@ export default class LineageDag extends React.Component<ComProps, any> {
       nodes: result.nodes,
       edges: result.edges
     };
-    
+
     setTimeout(() => {
       let tmpEdges = result.edges;
       result.edges = [];
@@ -157,14 +157,14 @@ export default class LineageDag extends React.Component<ComProps, any> {
         this.canvas.addEdges(tmpEdges, true);
 
         let minimap = _.get(this, 'props.config.minimap', {});
-
+        //@ts-ignore
         const minimapCfg = _.assign({}, minimap.config, {
           events: [
             'system.node.click',
             'system.canvas.click'
           ]
         });
-
+        //@ts-ignore
         if (minimap && minimap.enable) {
           this.canvas.setMinimap(true, minimapCfg);
         }
@@ -191,7 +191,7 @@ export default class LineageDag extends React.Component<ComProps, any> {
     }, _.get(this.props, 'config.delayDraw', 0));
 
   }
-  shouldComponentUpdate (newProps: ComProps, newState: any) {
+  shouldComponentUpdate(newProps: ComProps, newState: any) {
 
     let enableHoverChain = _.get(newProps, 'config.enableHoverChain', true);
     let titleRender = _.get(this.props, 'config.titleRender');
@@ -250,7 +250,7 @@ export default class LineageDag extends React.Component<ComProps, any> {
       this.canvas._renderPromise = Promise.all(nodesRenderPromise).then(() => {
         return new Promise<void>((resolve, reject) => {
           if (newProps.centerId) {
-            this.canvas.focusNodeWithAnimate(newProps.centerId, 'node' , {}, () => {
+            this.canvas.focusNodeWithAnimate(newProps.centerId, 'node', {}, () => {
               setTimeout(() => {
                 resolve();
               }, 50);
@@ -265,7 +265,7 @@ export default class LineageDag extends React.Component<ComProps, any> {
           }
         });
       });
-    } 
+    }
 
     this.canvasData = result;
 
@@ -277,15 +277,15 @@ export default class LineageDag extends React.Component<ComProps, any> {
     return isNeedUpdate;
   }
   render() {
-    const {canvas} = this;
-    const {actionMenu = []} = this.props;
+    const { canvas } = this;
+    const { actionMenu = [] } = this.props;
     const actionMenuVisible = _.get(this, 'props.config.showActionIcon', true);
 
     return (
       <div
         className={this._genClassName()}
       >
-        <ActionMenu 
+        <ActionMenu
           canvas={canvas}
           actionMenu={actionMenu}
           visible={actionMenuVisible}

@@ -1,0 +1,71 @@
+Arguments: 
+  /home/bert/.nvm/versions/node/v18.15.0/bin/node /mnt/c/Users/Bert/scoop/apps/yarn/1.22.5/Yarn/bin/yarn.js
+
+PATH: 
+  /home/bert/.vscode-server/bin/ee2b180d582a7f601fa6ecfdad8d9fd269ab1884/bin/remote-cli:/home/bert/.nvm/versions/node/v18.15.0/bin:/home/bert/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Go/bin:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Users/Bert/AppData/Roaming/nvm:/mnt/c/Program Files/nodejs:/mnt/c/Program Files (x86)/Tencent/微信web开发者工具/dll:/mnt/c/Users/Bert/.cargo/bin:/mnt/c/Users/Bert/scoop/apps/python/current/Scripts:/mnt/c/Users/Bert/scoop/apps/python/current:/mnt/c/Users/Bert/scoop/apps/yarn/current/global/node_modules/.bin:/mnt/c/Users/Bert/scoop/apps/yarn/current/Yarn/bin:/mnt/c/MinGW/bin:/mnt/c/Program Files/LLVM/bin:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Go/bin:/mnt/c/Users/Bert/scoop/shims:/mnt/c/Users/Bert/AppData/Roaming/npm:/mnt/c/Users/Bert/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/Bert/scoop/apps/git/2.29.2.windows.2/cmd:/mnt/c/Users/Bert/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/Bert/AppData/Local/Programs/Hyper/resources/bin:/mnt/c/Users/Bert/AppData/Roaming/nvm:/mnt/c/Program Files/nodejs
+
+Yarn version: 
+  1.22.5
+
+Node version: 
+  18.15.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: ENOENT: no such file or directory, copyfile '/home/bert/.cache/yarn/v6/npm-globals-13.20.0-ea276a1e508ffd4f1612888f9d1bad1e2717bf82-integrity/node_modules/globals/readme.md' -> '/home/bert/workspace/react-lineage-dag/example/node_modules/@eslint/eslintrc/node_modules/globals/readme.md'
+
+npm manifest: 
+  {
+    "name": "example",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "webpack-dev-server"
+    },
+    "author": "jambin",
+    "license": "MIT",
+    "dependencies": {
+      "@ant-design/icons": "^4.7.0",
+      "antd": "~4.18.0",
+      "jquery": "^3.4.1",
+      "react": "~16.12.0",
+      "react-dom": "^16.13.1",
+      "react-router": "~5.1.2",
+      "react-router-dom": "~5.1.2"
+    },
+    "devDependencies": {
+      "@babel/core": "~7.8.3",
+      "@babel/plugin-proposal-class-properties": "~7.8.3",
+      "@babel/plugin-proposal-object-rest-spread": "~7.8.3",
+      "@babel/plugin-transform-runtime": "^7.12.1",
+      "@babel/preset-env": "~7.8.3",
+      "@babel/preset-react": "~7.8.3",
+      "babel-loader": "8.0.6",
+      "babel-plugin-transform-es2015-modules-commonjs": "~6.26.2",
+      "css-loader": "~1.0.0",
+      "eslint": "~5.16.0",
+      "eslint-config-aliyun": "~2.0.3",
+      "eslint-plugin-react": "~7.13.0",
+      "file-loader": "~2.0.0",
+      "html-webpack-plugin": "^3.2.0",
+      "less": "~3.7.0",
+      "less-loader": "~4.1.0",
+      "mini-css-extract-plugin": "~0.9.0",
+      "style-loader": "~0.21.0",
+      "ts-loader": "~8.0.14",
+      "url-loader": "~1.0.1",
+      "webpack": "~4.41.5",
+      "webpack-cli": "~3.0.8",
+      "webpack-dev-server": "~3.10.1"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
