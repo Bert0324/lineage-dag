@@ -10,10 +10,10 @@ export class Adapter {
             cache[source[key].table_name] = source[key];
             return {
                 id: source[key].table_name,
-                name: source[key].table_name,
+                name: key,
                 fields: columnKeys.map(columnKey => ({
                     name: columnKey,
-                    title: columnKey
+                    title: ''
                 })),
                 isCollapse: false,
                 isExpand: false
@@ -23,14 +23,14 @@ export class Adapter {
         const relationKey: Record<string, boolean> = {};
         keys.map(key => {
             const item = source[key];
-            const srcTableId = source[key].table_name;
+            const tgtTableId = source[key].table_name;
             Object.keys(item.columns).forEach(columnKey => {
                 const columns = item.columns[columnKey];
-                const srcTableColName = columnKey;
+                const tgtTableColName = columnKey;
                 columns.forEach(column => {
                     const arr = column.split('.');
-                    const tgtTableColName = arr.pop();
-                    const tgtTableId = arr.join('.');
+                    const srcTableColName = arr.pop();
+                    const srcTableId = arr.join('.');
                     const k = `${srcTableId} ${tgtTableId} ${srcTableColName} ${tgtTableColName}`;
                     if (!relationKey[k]) {
                         relationKey[k] = true;

@@ -1,16 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { Layout, Tooltip, Modal, Select } from 'antd';
+import { Layout, Tooltip, Modal, Select, Upload, Button, message } from 'antd';
 import * as _ from 'lodash';
 import LineageDag from '../lib';
-import { mockData } from './mock_data/data';
+// import { mockData } from './mock_data/data';
 import 'antd/dist/antd.css';
 import './index.less';
 import { Adapter } from './adapter';
-import sourceData from '../data/mock.json';
+// import sourceData from '../data/mock.json';
 import { ITargetData } from './types';
-import { BorderOuterOutlined, DownSquareOutlined, CloseCircleOutlined, StarOutlined, UpSquareOutlined } from '@ant-design/icons';
+import { BorderOuterOutlined, DownSquareOutlined, StarOutlined, UploadOutlined } from '@ant-design/icons';
 
 const { Header } = Layout;
 
@@ -32,7 +32,9 @@ class Com extends React.Component<{}, ITargetData & any> {
         }
       }],
       visible: false,
-      initTable: null
+      initTable: null,
+      file: null,
+      isMock: true
     };
     // @ts-ignore
     this.columns = [{
@@ -72,6 +74,13 @@ class Com extends React.Component<{}, ITargetData & any> {
               targetTable.isCollapse = false;
             }
           }
+          if (relation.tgtTableId === id) {
+            const targetTable = this.state.tables.find(item => item.id === relation.srcTableId);
+            if (targetTable) {
+              targetTable.isExpand = true;
+              targetTable.isCollapse = false;
+            }
+          }
         });
         table.isCollapse = true;
         this.setState({
@@ -88,32 +97,49 @@ class Com extends React.Component<{}, ITargetData & any> {
         }, 1000);
       }
     }];
-    this.changeSourceData();
   }
 
-  changeSourceData(isNotMock?: boolean) {
-    if (!isNotMock) {
-      const { tables: sourceTables, relations: sourceRelations } = mockData;
-      const tables = _.cloneDeep(sourceTables);
-      const relations = _.cloneDeep(sourceRelations);
+  changeSourceData() {
+    const update = (source) => {
+      const { tables, relations } = new Adapter().transfer(source);
+      const options = tables.slice(0, 10).map(table => table.name);
       this.setState({
         tables,
         relations,
-        options: tables.slice(0, 10).map(table => table.name),
+        options,
       });
+    };
+    if (this.state.file) {
+      const reader = new FileReader();
+      reader.addEventListener(
+        "load",
+        () => {
+          // this will then display a text file
+          try {
+            const v = JSON.parse(reader.result.toString());
+            update(v);
+            localStorage.setItem('sourceJSON', reader.result.toString());
+          } catch (e) {
+            console.log(e);
+            message.error(`invalid json file: ${e}`);
+          }
+        },
+        false
+      );
+      reader.readAsText(this.state.file);
     } else {
-      const { tables: sourceTables, relations: sourceRelations } = new Adapter().transfer(sourceData);
-      const tables = _.cloneDeep(sourceTables);
-      const relations = _.cloneDeep(sourceRelations);
-      this.setState({
-        tables,
-        relations,
-        options: tables.slice(0, 10).map(table => table.name),
-      });
+      try {
+        const v = JSON.parse(localStorage.getItem('sourceJSON'));
+        update(v);
+      } catch (e) {
+        console.log(e);
+        message.warn('not init source data')
+      }
     }
   }
 
   render() {
+    console.log(111, this.state)
     return (
       <>
         <LineageDag
@@ -128,6 +154,7 @@ class Com extends React.Component<{}, ITargetData & any> {
             this.setState({
               canvas
             });
+            this.changeSourceData();
           }}
           config={{
             titleRender: (title, node) => {
@@ -154,9 +181,23 @@ class Com extends React.Component<{}, ITargetData & any> {
             this.setState({
               visible: false,
               tables: [...this.state.tables]
-            })
+            });
           }}
         >
+          <Upload beforeUpload={(file) => {
+            this.setState({
+              file
+            });
+            setTimeout(() => {
+              this.changeSourceData();
+            })
+          }} onRemove={() => {
+            this.setState({
+              file: null
+            });
+          }} multiple={false} fileList={[this.state.file].filter(Boolean)}>
+            <Button icon={<UploadOutlined />}>Select File</Button>
+          </Upload>
           <Select
             style={{
               minWidth: '200px'
@@ -164,6 +205,7 @@ class Com extends React.Component<{}, ITargetData & any> {
             placeholder='search table name'
             showSearch onSearch={(v) => {
               const options = this.state.tables.filter(table => (table.name as string).includes(v)).map(table => table.name).slice(0, 10);
+              debugger;
               this.setState({
                 options
               });
@@ -176,19 +218,6 @@ class Com extends React.Component<{}, ITargetData & any> {
             }}
           >
             {this.state.options.map(option => {
-              return <Select.Option key={option}>{option}</Select.Option>
-            })}
-          </Select>
-          <Select
-            style={{
-              minWidth: '200px'
-            }}
-            placeholder='change source data'
-            onChange={v => {
-              this.changeSourceData(v !== 'mock');
-            }}
-          >
-            {['mock', 'not mock'].map(option => {
               return <Select.Option key={option}>{option}</Select.Option>
             })}
           </Select>
