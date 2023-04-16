@@ -10,7 +10,7 @@ import './index.less';
 import { Adapter } from './adapter';
 // import sourceData from '../data/mock.json';
 import { ITargetData } from './types';
-import { BorderOuterOutlined, DownSquareOutlined, StarOutlined, UploadOutlined } from '@ant-design/icons';
+import { BorderOuterOutlined, DownSquareOutlined, StarOutlined, UploadOutlined, ExpandOutlined } from '@ant-design/icons';
 
 const { Header } = Layout;
 
@@ -19,6 +19,7 @@ class Com extends React.Component<{}, ITargetData & any> {
     super(props);
     this.state = {
       tables: [],
+      sourceTable: [],
       relations: [],
       options: [],
       canvas: null,
@@ -82,29 +83,63 @@ class Com extends React.Component<{}, ITargetData & any> {
             }
           }
         });
-        table.isCollapse = true;
+        table.isCollapse = false;
+        const tables = [...this.state.tables];
         this.setState({
-          tables: [...this.state.tables],
+          tables: tables.map(item => ({ ...item, isCollapse: true })),
         });
         setTimeout(() => {
-          const tableIndex = this.state.tables.findIndex(item => item.id === nodeData.id);
-          const table = this.state.tables[tableIndex];
-          table.isCollapse = false;
           this.setState({
-            tables: [...this.state.tables],
+            tables,
             centerId: table.id
           });
         }, 1000);
       }
-    }];
+      },
+      //   {
+      //     id: 'showLinks',
+      //     name: '折叠',
+      //     icon: <Tooltip title='展示所有column'><ExpandOutlined /></Tooltip>,
+      //     onClick: (nodeData) => {
+      //       const tableIndex = this.state.tables.findIndex(item => item.id === nodeData.id);
+      //       const table = this.state.tables[tableIndex] as ITargetData['tables'][number];
+      //       if (table.isShowAllColumns) {
+      //         table.fields = this.state.
+      //       } else {
+
+      //       }
+      //       table.isShowAllColumns = !table.isShowAllColumns;
+      //       this.setState({
+      //         tables: [...this.state.tables],
+      //       });
+      //   }
+      // }
+    ];
   }
 
   changeSourceData() {
     const update = (source) => {
       const { tables, relations } = new Adapter().transfer(source);
+      const sourceTable = _.cloneDeep(tables);
       const options = tables.slice(0, 10).map(table => table.name);
+      // tables.forEach(table => {
+      //   const fields = table.fields.filter(field => {
+      //     const match = relations.find(item => {
+      //       if (item.srcTableId === table.name && item.srcTableColName === field.name) {
+      //         return false;
+      //       }
+      //       if (item.tgtTableId === table.name && item.tgtTableColName === field.name) {
+      //         return false;
+      //       }
+      //       return true;
+      //     });
+      //     return !!match;
+      //   });
+      //   table.fields = fields;
+      // });
       this.setState({
         tables,
+        sourceTable,
         relations,
         options,
       });
@@ -129,7 +164,8 @@ class Com extends React.Component<{}, ITargetData & any> {
       reader.readAsText(this.state.file);
     } else {
       try {
-        const v = JSON.parse(localStorage.getItem('sourceJSON'));
+        // @ts-ignore
+        const v = JSON.parse(window.inlineSource || localStorage.getItem('sourceJSON'));
         update(v);
       } catch (e) {
         console.log(e);
@@ -139,7 +175,6 @@ class Com extends React.Component<{}, ITargetData & any> {
   }
 
   render() {
-    console.log(111, this.state)
     return (
       <>
         <LineageDag
@@ -205,7 +240,6 @@ class Com extends React.Component<{}, ITargetData & any> {
             placeholder='search table name'
             showSearch onSearch={(v) => {
               const options = this.state.tables.filter(table => (table.name as string).includes(v)).map(table => table.name).slice(0, 10);
-              debugger;
               this.setState({
                 options
               });

@@ -16,7 +16,8 @@ export class Adapter {
                     title: ''
                 })),
                 isCollapse: false,
-                isExpand: false
+                isExpand: false,
+                isShowAllColumns: false
             };
         });
         data.relations = [];

@@ -17,6 +17,10 @@ export interface ITargetData {
          * relations visible
          */
         isExpand?: boolean;
+        /**
+         * show all columns
+         */
+        isShowAllColumns?: boolean;
     }[];
     relations: {
         srcTableId: string;
@@ -34,7 +38,7 @@ export interface ISourceData {
      * key: table id
      */
     [key: string]: {
-        sql: string;
+        sql?: string;
         /**
          * table 
          */
@@ -46,6 +50,6 @@ export interface ISourceData {
             [key: string]: string[];
         }
         table_name: string;
-        plan: Record<string, any>;
+        plan?: Record<string, any>;
     };
 }
