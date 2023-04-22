@@ -10,7 +10,8 @@ import './index.less';
 import { Adapter } from './adapter';
 // import sourceData from '../data/mock.json';
 import { ITargetData } from './types';
-import { BorderOuterOutlined, DownSquareOutlined, StarOutlined, UploadOutlined, ExpandOutlined } from '@ant-design/icons';
+import { BorderOuterOutlined, DownSquareOutlined, StarOutlined, UploadOutlined, ShrinkOutlined, ArrowsAltOutlined, RetweetOutlined } from '@ant-design/icons';
+import { t } from './utils/i18n';
 
 const { Header } = Layout;
 
@@ -18,6 +19,7 @@ class Com extends React.Component<{}, ITargetData & any> {
   constructor(props) {
     super(props);
     this.state = {
+      allCollapse: false,
       tables: [],
       sourceTable: [],
       relations: [],
@@ -26,12 +28,50 @@ class Com extends React.Component<{}, ITargetData & any> {
       actionMenu: [{
         icon: <StarOutlined />,
         key: 'star',
+        title: 'select',
         onClick: () => {
           this.setState({
             visible: true
           })
         }
-      }],
+      },{
+        icon: <ShrinkOutlined />,
+        key: 'eee',
+        title: 'expand all',
+        onClick: () => {
+          this.state.tables.forEach(table => {
+            table.isCollapse = !!this.state.allCollapse;
+          });
+          this.setState({
+            tables: [...this.state.tables],
+            allCollapse: !this.state.allCollapse
+          });
+        }
+      },
+      {
+        icon: <RetweetOutlined />,
+        key: 'eee',
+        title: 'explore all',
+        onClick: () => {
+          if (this.state.initTable) {
+            const initNext = this.findNode(this.state.initTable, true);
+            const cache = [this.state.initTable.id];
+            const search = (list) => {
+              list.forEach(id => {
+                if (!cache.includes(id)) {
+                  const table = this.state.tables.find(item => item.id === id);
+                  cache.push(id);
+                  const next = this.findNode(table, true);
+                  const v = next.filter(item => !cache.includes(item));
+                  search(v);
+                }
+              });
+            };
+            search(initNext);
+          }
+        }
+      }
+    ],
       visible: false,
       initTable: null,
       file: null,
@@ -47,8 +87,8 @@ class Com extends React.Component<{}, ITargetData & any> {
     // @ts-ignore
     this.operator = [{
       id: 'isExpand',
-      name: '展开',
-      icon: <Tooltip title='展开'><BorderOuterOutlined /></Tooltip>,
+      name: t('expand'),
+      icon: <Tooltip title={t('expand')}><BorderOuterOutlined /></Tooltip>,
       onClick: (nodeData) => {
         const tableIndex = this.state.tables.findIndex(item => item.id === nodeData.id);
         const table = this.state.tables[tableIndex];
@@ -60,61 +100,57 @@ class Com extends React.Component<{}, ITargetData & any> {
       }
     }, {
       id: 'explore',
-      name: '探索',
-      icon: <Tooltip title='探索'><DownSquareOutlined /></Tooltip>,
+      name: t('explore'),
+      icon: <Tooltip title={t('explore')}><DownSquareOutlined /></Tooltip>,
       onClick: (nodeData) => {
-        const tableIndex = this.state.tables.findIndex(item => item.id === nodeData.id);
-        const table = this.state.tables[tableIndex] as ITargetData['tables'][number];
-        const relations = this.state.relations as ITargetData['relations'];
-        const id = table.id;
-        relations.forEach(relation => {
-          if (relation.srcTableId === id) {
-            const targetTable = this.state.tables.find(item => item.id === relation.tgtTableId);
-            if (targetTable) {
-              targetTable.isExpand = true;
-              targetTable.isCollapse = false;
-            }
-          }
-          if (relation.tgtTableId === id) {
-            const targetTable = this.state.tables.find(item => item.id === relation.srcTableId);
-            if (targetTable) {
-              targetTable.isExpand = true;
-              targetTable.isCollapse = false;
-            }
-          }
-        });
-        table.isCollapse = false;
-        const tables = [...this.state.tables];
-        this.setState({
-          tables: tables.map(item => ({ ...item, isCollapse: true })),
-        });
-        setTimeout(() => {
-          this.setState({
-            tables,
-            centerId: table.id
-          });
-        }, 1000);
+        this.findNode(nodeData);
       }
-      },
-      //   {
-      //     id: 'showLinks',
-      //     name: '折叠',
-      //     icon: <Tooltip title='展示所有column'><ExpandOutlined /></Tooltip>,
-      //     onClick: (nodeData) => {
-      //       const tableIndex = this.state.tables.findIndex(item => item.id === nodeData.id);
-      //       const table = this.state.tables[tableIndex] as ITargetData['tables'][number];
-      //       if (table.isShowAllColumns) {
-      //         table.fields = this.state.
-      //       } else {
-
-      //       }
-      //       table.isShowAllColumns = !table.isShowAllColumns;
-      //       this.setState({
-      //         tables: [...this.state.tables],
-      //       });
-      //   }
-      // }
+      }
     ];
+  }
+
+  findNode(nodeData, forceCollapse?: boolean) {
+    const tableIndex = this.state.tables.findIndex(item => item.id === nodeData.id);
+    const table = this.state.tables[tableIndex] as ITargetData['tables'][number];
+    const relations = this.state.relations as ITargetData['relations'];
+    const id = table.id;
+    const newNode = [];
+    relations.forEach(relation => {
+      if (relation.srcTableId === id) {
+        const targetTable = this.state.tables.find(item => item.id === relation.tgtTableId);
+        if (targetTable) {
+          targetTable.isExpand = true;
+          targetTable.isCollapse = false;
+          if (!newNode.includes(targetTable.id)) {
+            newNode.push(targetTable.id);
+          }
+        }
+      }
+      if (relation.tgtTableId === id) {
+        const targetTable = this.state.tables.find(item => item.id === relation.srcTableId);
+        if (targetTable) {
+          targetTable.isExpand = true;
+          targetTable.isCollapse = false;
+          if (!newNode.includes(targetTable.id)) {
+            newNode.push(targetTable.id);
+          }
+        }
+      }
+    });
+    table.isCollapse = false;
+    const tables = [...this.state.tables];
+    this.setState({
+      tables: tables.map(item => ({ ...item, isCollapse: true })),
+    });
+    if (!forceCollapse) {
+      setTimeout(() => {
+        this.setState({
+          tables,
+          centerId: table.id
+        });
+      }, 1000);
+    }
+    return newNode;
   }
 
   changeSourceData() {
@@ -122,21 +158,6 @@ class Com extends React.Component<{}, ITargetData & any> {
       const { tables, relations } = new Adapter().transfer(source);
       const sourceTable = _.cloneDeep(tables);
       const options = tables.slice(0, 10).map(table => table.name);
-      // tables.forEach(table => {
-      //   const fields = table.fields.filter(field => {
-      //     const match = relations.find(item => {
-      //       if (item.srcTableId === table.name && item.srcTableColName === field.name) {
-      //         return false;
-      //       }
-      //       if (item.tgtTableId === table.name && item.tgtTableColName === field.name) {
-      //         return false;
-      //       }
-      //       return true;
-      //     });
-      //     return !!match;
-      //   });
-      //   table.fields = fields;
-      // });
       this.setState({
         tables,
         sourceTable,
@@ -261,11 +282,11 @@ class Com extends React.Component<{}, ITargetData & any> {
   }
 }
 
-
+document.title = t('title');
 ReactDOM.render((
   <Router>
     <Layout>
-      <Header className='header'>DTDesign-React数据血缘图</Header>
+      <Header className='header'>{t('title')}</Header>
       <Layout>
         <Com />
       </Layout>

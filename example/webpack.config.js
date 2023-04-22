@@ -9,8 +9,8 @@ module.exports = {
     app: './index.tsx'
   },
   output: {
-    filename: '[name].js',
-    chunkFilename: '[name].js'
+    filename: '[name].[contenthash].js',
+    chunkFilename: '[name].[contenthash].js'
   },
   resolve: {
     modules: [
@@ -92,31 +92,31 @@ module.exports = {
       template: './index.html'
     })
   ],
-  // optimization: {
-  //   splitChunks: {
-  //     // whether for async imported files
-  //     chunks: 'all',
-  //     cacheGroups: {
-  //       // third party codes
-  //       vendor: {
-  //         name: 'vendor',
-  //         // larger number means higher priority
-  //         priority: 1,
-  //         test: /node_modules/,
-  //         minSize: 0,
-  //         minChunks: 1
-  //       },
-  //       // common codes
-  //       common: {
-  //         name: 'common',
-  //         priority: 0,
-  //         minSize: 0,
-  //         // at least used 2 times
-  //         minChunks: 2
-  //       }
-  //     }
-  //   }
-  // },
+  optimization: {
+    splitChunks: {
+      // whether for async imported files
+      chunks: 'all',
+      cacheGroups: {
+        // third party codes
+        vendor: {
+          name: 'vendor',
+          // larger number means higher priority
+          priority: 1,
+          test: /node_modules/,
+          minSize: 0,
+          minChunks: 1
+        },
+        // common codes
+        common: {
+          name: 'common',
+          priority: 0,
+          minSize: 0,
+          // at least used 2 times
+          minChunks: 2
+        }
+      }
+    }
+  },
   devServer: {
     contentBase: './dist', // 本地服务器所加载的页面所在的目录
     historyApiFallback: true, // 不跳转

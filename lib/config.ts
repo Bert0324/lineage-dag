@@ -1,10 +1,12 @@
 'use strict';
 
+import { t } from "../example/utils/i18n";
+
 export const actions = [
   {
     key: 'zoom-in',
     icon: 'table-build-icon table-build-icon-zoom-in',
-    title: '放大',
+    title: t('zoomIn'),
     onClick: (canvas) => {
       canvas.zoom(canvas._zoomData + 0.1);
     }
@@ -12,7 +14,7 @@ export const actions = [
   {
     key: 'zoom-out',
     icon: 'table-build-icon table-build-icon-zoom-out',
-    title: '缩小',
+    title: t('zoomOut'),
     onClick: (canvas) => {
       canvas.zoom(canvas._zoomData - 0.1);
     }
@@ -20,7 +22,7 @@ export const actions = [
   {
     key: 'fit',
     icon: 'table-build-icon table-build-icon-quanping2',
-    title: '居中',
+    title: t('center'),
     onClick: (canvas) => {
       canvas.focusCenterWithAnimate(undefined, () => {
         console.log('complete!!!')
