@@ -5,5 +5,7 @@
   "zoomOut": "zoom out",
   "search": "search",
   "expand": "expand",
-  "explore": "explore"
+  "explore": "explore",
+  "selectFile": "Select File",
+  "crrFile": ", current file: "
 }

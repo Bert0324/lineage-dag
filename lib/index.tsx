@@ -92,7 +92,7 @@ export default class LineageDag extends React.Component<ComProps, any> {
       root: root,
       disLinkable: false,
       linkable: false,
-      draggable: false,
+      draggable: true,
       zoomable: true,
       moveable: true,
       theme: {

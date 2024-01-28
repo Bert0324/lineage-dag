@@ -1,5 +1,8 @@
 const map = new Map();
-
+let canvas;
+const setCanvas = (c) => {
+  canvas = c;
+}
 export const setElementDragable = (dom, callback) => {
   let clicked = false;
   let moved = false;
@@ -24,7 +27,7 @@ export const setElementDragable = (dom, callback) => {
   document.addEventListener('mouseup', () => {
     const drag = clicked && moved;
     if (drag) {
-      callback?.();
+      callback?.(setCanvas);
     }
     clicked = false;
   });
@@ -32,6 +35,7 @@ export const setElementDragable = (dom, callback) => {
     moved = true;
     const drag = clicked && moved;
     if (drag) {
+      canvas.zoom(1);
       offsetX = e.clientX - x;
       offsetY = e.clientY - y;
       dom.style.top = `${top + offsetY}px`;

@@ -32,7 +32,7 @@ class Com extends React.Component<{}, ITargetData & any> {
         onClick: () => {
           this.setState({
             visible: true
-          })
+          });
         }
       },{
         icon: <ShrinkOutlined />,
@@ -165,6 +165,9 @@ class Com extends React.Component<{}, ITargetData & any> {
         options,
       });
     };
+    this.setState({
+      initTable: undefined
+    })
     if (this.state.file) {
       const reader = new FileReader();
       reader.addEventListener(
@@ -195,9 +198,86 @@ class Com extends React.Component<{}, ITargetData & any> {
     }
   }
 
+  confirmTable() {
+    this.state.tables.forEach(table => {
+      table.isExpand = false;
+    });
+    this.state.initTable.isExpand = true;
+    const tables = [...this.state.tables];
+    this.setState({
+      visible: false,
+      tables: tables.map(item => ({ ...item, isCollapse: true })),
+    });
+    setTimeout(() => {
+      this.setState({
+        tables,
+        centerId: this.state.initTable.id
+      });
+    }, 1000);
+  }
+
+
+  getSelect(change?: boolean) {
+    return           <Select
+    style={{
+      minWidth: '200px'
+    }}
+    value={this.state.initTable?.id}
+    placeholder='search table name'
+    showSearch onSearch={(v) => {
+      const options = this.state.tables.filter(table => (table.name as string).includes(v)).map(table => table.name).slice(0, 10);
+      this.setState({
+        options
+      });
+    }}
+    onChange={v => {
+      const initTable = this.state.tables.find(table => table.name === v);
+      this.setState({
+        initTable,
+      });
+      setTimeout(() => {
+        if (change) {
+          this.confirmTable()
+        }
+      })
+    }}
+  >
+    {this.state.options.map(option => {
+      return <Select.Option key={option}>{option}</Select.Option>
+    })}
+  </Select>
+  }
+
+  getUpload() {
+    return           <Upload showUploadList={false} beforeUpload={(file) => {
+      this.setState({
+        file
+      });
+      setTimeout(() => {
+        this.changeSourceData();
+      })
+    }} onRemove={() => {
+      this.setState({
+        file: null
+      });
+    }} multiple={false} fileList={[this.state.file].filter(Boolean)}>
+      <Button icon={<UploadOutlined />}>{t('selectFile')} {this.state.file?.name ? `${t('crrFile')}${this.state.file?.name}` : ''}</Button>
+    </Upload>
+  }
+
   render() {
     return (
-      <>
+      <Router>
+      <Layout>
+        <Header className='header'>
+          <div style={{ display: 'flex', alignItems:'center'}}>
+          <div style={{ marginRight: '20px'}}>{t('title')}</div>
+          <div style={{ marginRight: '20px'}}>{this.getUpload()}</div>
+          {this.getSelect(true)}
+          </div>
+        </Header>
+        <Layout>
+        <>
         <LineageDag
           tables={this.state.tables.filter(table => table.isExpand)}
           relations={this.state.relations}
@@ -230,66 +310,21 @@ class Com extends React.Component<{}, ITargetData & any> {
             })
           }}
           onOk={() => {
-            this.state.tables.forEach(table => {
-              table.isExpand = false;
-            });
-            this.state.initTable.isExpand = true;
-            this.setState({
-              visible: false,
-              tables: [...this.state.tables]
-            });
+            this.confirmTable();
           }}
         >
-          <Upload beforeUpload={(file) => {
-            this.setState({
-              file
-            });
-            setTimeout(() => {
-              this.changeSourceData();
-            })
-          }} onRemove={() => {
-            this.setState({
-              file: null
-            });
-          }} multiple={false} fileList={[this.state.file].filter(Boolean)}>
-            <Button icon={<UploadOutlined />}>Select File</Button>
-          </Upload>
-          <Select
-            style={{
-              minWidth: '200px'
-            }}
-            placeholder='search table name'
-            showSearch onSearch={(v) => {
-              const options = this.state.tables.filter(table => (table.name as string).includes(v)).map(table => table.name).slice(0, 10);
-              this.setState({
-                options
-              });
-            }}
-            onChange={v => {
-              const initTable = this.state.tables.find(table => table.name === v);
-              this.setState({
-                initTable
-              })
-            }}
-          >
-            {this.state.options.map(option => {
-              return <Select.Option key={option}>{option}</Select.Option>
-            })}
-          </Select>
+          {this.getUpload()}
+          {this.getSelect()}
         </Modal>
       </>
+        </Layout>
+      </Layout>
+    </Router>
     );
   }
 }
 
 document.title = t('title');
 ReactDOM.render((
-  <Router>
-    <Layout>
-      <Header className='header'>{t('title')}</Header>
-      <Layout>
-        <Com />
-      </Layout>
-    </Layout>
-  </Router>
+  <Com />
 ), document.getElementById('main'));
