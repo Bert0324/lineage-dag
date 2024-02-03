@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { Layout, Tooltip, Modal, Select, Upload, Button, message } from 'antd';
+import { Layout, Tooltip, Modal, Select, Upload, Button, message, Popover  } from 'antd';
 import * as _ from 'lodash';
 import LineageDag from '../lib';
 // import { mockData } from './mock_data/data';
@@ -12,7 +12,8 @@ import { Adapter } from './adapter';
 import { ITargetData } from './types';
 import { BorderOuterOutlined, DownSquareOutlined, StarOutlined, UploadOutlined, ShrinkOutlined, ArrowsAltOutlined, RetweetOutlined } from '@ant-design/icons';
 import { t } from './utils/i18n';
-
+import demoImage from './public/57b0f752b765995c9d2d4871368102a.png';
+import Link from 'antd/lib/typography/Link';
 const { Header } = Layout;
 
 class Com extends React.Component<{}, ITargetData & any> {
@@ -274,6 +275,12 @@ class Com extends React.Component<{}, ITargetData & any> {
           <div style={{ marginRight: '20px'}}>{t('title')}</div>
           <div style={{ marginRight: '20px'}}>{this.getUpload()}</div>
           {this.getSelect(true)}
+          <Popover content={<img src={demoImage} />} >
+            <Button type="primary" style={{ marginLeft: '20px'}}>{t('demo')}</Button>
+          </Popover>
+          <Link href={t('linkValue')} target='_blank' style={{ marginLeft: '20px'}}>
+          <Button type="primary">{t('linkText')}</Button>
+          </Link>
           </div>
         </Header>
         <Layout>

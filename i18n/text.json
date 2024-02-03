@@ -7,5 +7,8 @@
   "expand": "expand",
   "explore": "explore",
   "selectFile": "Select File",
-  "crrFile": ", current file: "
+  "crrFile": ", current file: ",
+  "demo": "Demo",
+  "linkText": "Link",
+  "linkValue": "https://www.google.com/"
 }

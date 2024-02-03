@@ -48,7 +48,7 @@ export const setDragedPosition = (node, point, obj) => {
   const { x, y } = getDistanceBetweenElements(point, node);
   const { width, height} = node.getBoundingClientRect();
   obj.pos[1] = node.offsetTop + y + height / 2;
-  obj.pos[0] = node.offsetLeft + x + width / 2;
+  obj.pos[0] = node.offsetLeft + x + width / 2 - 15;
   return obj;
 };
 
