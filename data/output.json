@@ -1,1 +1,40 @@
-{"customers": {"tables": [""], "columns": {"cid": [""], "name": [""], "age": [""]}, "table_name": "customers"}, "orders": {"tables": [""], "columns": {"cid": [""], "oid": [""]}, "table_name": "orders"}, "web": {"tables": [""], "columns": {"cid": [""], "login": [""], "page": [""], "date": [""]}, "table_name": "web"}, "webinfo": {"tables": ["customers", "web"], "columns": {"cid": ["customers.cid", "web.cid", "web.login"], "login": ["customers.cid", "web.cid", "web.login"], "page": ["customers.cid", "web.cid", "web.login", "web.page"], "date": ["customers.cid", "web.cid", "web.date", "web.login"]}, "table_name": "webinfo"}, "info": {"tables": ["webinfo", "customers", "orders"], "columns": {"name": ["customers.cid", "customers.name", "orders.cid", "webinfo.cid"], "age": ["customers.age", "customers.cid", "orders.cid", "webinfo.cid"], "oid": ["customers.cid", "orders.cid", "orders.oid", "webinfo.cid"], "cid": ["customers.cid", "orders.cid", "webinfo.cid"], "login": ["customers.cid", "orders.cid", "webinfo.cid", "webinfo.login"], "page": ["customers.cid", "orders.cid", "webinfo.cid", "webinfo.page"], "date": ["customers.cid", "orders.cid", "webinfo.cid", "webinfo.date"]}, "table_name": "info"}}
+{
+  "customers": {
+    "tables": [""],
+    "columns": { "cid": [""], "name": [""], "age": [""] },
+    "table_name": "customers"
+  },
+  "orders": {
+    "tables": [""],
+    "columns": { "cid": [""], "oid": [""] },
+    "table_name": "orders"
+  },
+  "web": {
+    "tables": [""],
+    "columns": { "cid": [""], "login": [""], "page": [""], "date": [""] },
+    "table_name": "web"
+  },
+  "webinfo": {
+    "tables": ["customers", "web"],
+    "columns": {
+      "cid": ["customers.cid", "web.cid", "web.login"],
+      "login": ["customers.cid", "web.cid", "web.login"],
+      "page": ["customers.cid", "web.cid", "web.login", "web.page"],
+      "date": ["customers.cid", "web.cid", "web.date", "web.login"]
+    },
+    "table_name": "webinfo"
+  },
+  "info": {
+    "tables": ["webinfo", "customers", "orders"],
+    "columns": {
+      "name": ["customers.cid", "customers.name", "orders.cid", "webinfo.cid"],
+      "age": ["customers.age", "customers.cid", "orders.cid", "webinfo.cid"],
+      "oid": ["customers.cid", "orders.cid", "orders.oid", "webinfo.cid"],
+      "cid": ["customers.cid", "orders.cid", "webinfo.cid"],
+      "login": ["customers.cid", "orders.cid", "webinfo.cid", "webinfo.login"],
+      "page": ["customers.cid", "orders.cid", "webinfo.cid", "webinfo.page"],
+      "date": ["customers.cid", "orders.cid", "webinfo.cid", "webinfo.date"]
+    },
+    "table_name": "info"
+  }
+}

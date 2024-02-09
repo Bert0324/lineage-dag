@@ -1,0 +1,238 @@
+{
+  "orders": {
+    "tables": [""],
+    "columns": {
+      "cid": [[""], [""]],
+      "oid": [[""], [""]],
+      "pid": [[""], [""]]
+    },
+    "table_name": "orders",
+    "sql": "this is a base table"
+  },
+  "payments": {
+    "tables": [""],
+    "columns": {
+      "amount": [[""], [""]],
+      "cid": [[""], [""]],
+      "method": [[""], [""]]
+    },
+    "table_name": "payments",
+    "sql": "this is a base table"
+  },
+  "customers": {
+    "tables": [""],
+    "columns": {
+      "name": [[""], [""]],
+      "cid": [[""], [""]],
+      "age": [[""], [""]]
+    },
+    "table_name": "customers",
+    "sql": "this is a base table"
+  },
+  "web": {
+    "tables": [""],
+    "columns": {
+      "page": [[""], [""]],
+      "reg": [[""], [""]],
+      "cid": [[""], [""]],
+      "date": [[""], [""]]
+    },
+    "table_name": "web",
+    "sql": "this is a base table"
+  },
+  "products": {
+    "tables": [""],
+    "columns": {
+      "quantity": [[""], [""]],
+      "pid": [[""], [""]],
+      "name": [[""], [""]]
+    },
+    "table_name": "products",
+    "sql": "this is a base table"
+  },
+  "webact": {
+    "tables": ["webinfo", "web"],
+    "columns": {
+      "wcid": [
+        ["webinfo.wcid"],
+        [
+          "web.page",
+          "webinfo.wpage",
+          "web.reg",
+          "webinfo.wcid",
+          "webinfo.wreg",
+          "web.cid",
+          "web.date",
+          "webinfo.wdate"
+        ]
+      ],
+      "wdate": [
+        ["webinfo.wdate"],
+        [
+          "web.page",
+          "webinfo.wpage",
+          "web.reg",
+          "webinfo.wcid",
+          "webinfo.wreg",
+          "web.cid",
+          "web.date",
+          "webinfo.wdate"
+        ]
+      ],
+      "wpage": [
+        ["webinfo.wpage"],
+        [
+          "web.page",
+          "webinfo.wpage",
+          "web.reg",
+          "webinfo.wcid",
+          "webinfo.wreg",
+          "web.cid",
+          "web.date",
+          "webinfo.wdate"
+        ]
+      ],
+      "wreg": [
+        ["webinfo.wreg"],
+        [
+          "web.page",
+          "webinfo.wpage",
+          "web.reg",
+          "webinfo.wcid",
+          "webinfo.wreg",
+          "web.cid",
+          "web.date",
+          "webinfo.wdate"
+        ]
+      ]
+    },
+    "table_name": "webact",
+    "sql": "SELECT w.wcid,w.wdate,w.wpage,w.wreg FROM webinfo w INTERSECT SELECT w1.cid,w1.date,w1.page,w1.reg FROM web w1;"
+  },
+  "info": {
+    "tables": ["webact", "orders", "customers"],
+    "columns": {
+      "name": [
+        ["customers.name"],
+        ["customers.cid", "orders.cid", "webact.wcid"]
+      ],
+      "age": [
+        ["customers.age"],
+        ["customers.cid", "orders.cid", "webact.wcid"]
+      ],
+      "oid": [["orders.oid"], ["customers.cid", "orders.cid", "webact.wcid"]],
+      "wcid": [["webact.wcid"], ["customers.cid", "orders.cid", "webact.wcid"]],
+      "wdate": [
+        ["webact.wdate"],
+        ["customers.cid", "orders.cid", "webact.wcid"]
+      ],
+      "wpage": [
+        ["webact.wpage"],
+        ["customers.cid", "orders.cid", "webact.wcid"]
+      ],
+      "wreg": [["webact.wreg"], ["customers.cid", "orders.cid", "webact.wcid"]]
+    },
+    "table_name": "info",
+    "sql": "SELECT c.name,c.age,o.oid,w.* FROM customers c JOIN orders o ON c.cid = o.cid JOIN webact w ON c.cid = w.wcid;"
+  },
+  "webinfo": {
+    "tables": ["web", "customers"],
+    "columns": {
+      "wcid": [["customers.cid"], ["web.date", "customers.cid", "web.cid"]],
+      "wdate": [["web.date"], ["web.date", "customers.cid", "web.cid"]],
+      "wpage": [["web.page"], ["web.date", "customers.cid", "web.cid"]],
+      "wreg": [["web.reg"], ["web.date", "customers.cid", "web.cid"]]
+    },
+    "table_name": "webinfo",
+    "sql": "SELECT c.cid AS wcid,w.date AS wdate,w.page AS wpage,w.reg AS wreg FROM customers c JOIN web w ON c.cid = w.cid WHERE EXTRACT(YEAR from w.date) = 2022;"
+  },
+  "orderinfo": {
+    "tables": ["products", "orders", "customers"],
+    "columns": {
+      "cid": [
+        ["customers.cid"],
+        [
+          "products.quantity",
+          "products.pid",
+          "customers.cid",
+          "orders.cid",
+          "orders.pid"
+        ]
+      ],
+      "oid": [
+        ["orders.oid"],
+        [
+          "products.quantity",
+          "products.pid",
+          "customers.cid",
+          "orders.cid",
+          "orders.pid"
+        ]
+      ],
+      "pid": [
+        ["products.pid"],
+        [
+          "products.quantity",
+          "products.pid",
+          "customers.cid",
+          "orders.cid",
+          "orders.pid"
+        ]
+      ],
+      "name": [
+        ["products.name"],
+        [
+          "products.quantity",
+          "products.pid",
+          "customers.cid",
+          "orders.cid",
+          "orders.pid"
+        ]
+      ],
+      "quantity": [
+        ["products.quantity"],
+        [
+          "products.quantity",
+          "products.pid",
+          "customers.cid",
+          "orders.cid",
+          "orders.pid"
+        ]
+      ]
+    },
+    "table_name": "orderinfo",
+    "sql": "SELECT c.cid,o.oid,p.pid,p.name,p.quantity FROM customers c JOIN orders o on c.cid = o.cid JOIN products p ON o.pid = p.pid WHERE p.quantity >= 5 ORDER BY p.quantity DESC;"
+  },
+  "orderpay": {
+    "tables": ["orders", "payments", "customers"],
+    "columns": {
+      "cid": [
+        ["customers.cid"],
+        ["orders.cid", "customers.cid", "payments.amount", "payments.cid"]
+      ],
+      "oid": [
+        ["orders.oid"],
+        ["orders.cid", "customers.cid", "payments.amount", "payments.cid"]
+      ],
+      "amount": [
+        ["payments.amount"],
+        ["orders.cid", "customers.cid", "payments.amount", "payments.cid"]
+      ],
+      "method": [
+        ["payments.method"],
+        ["orders.cid", "customers.cid", "payments.amount", "payments.cid"]
+      ]
+    },
+    "table_name": "orderpay",
+    "sql": "SELECT c.cid,o.oid,p.amount,p.method FROM customers c JOIN orders o on c.cid = o.cid JOIN payments p ON p.cid = o.cid WHERE p.amount >= 500;"
+  },
+  "vips": {
+    "tables": ["orderpay"],
+    "columns": {
+      "cid": [["orderpay.cid"], ["orderpay.cid", "orderpay.amount"]],
+      "total": [["orderpay.amount"], ["orderpay.cid", "orderpay.amount"]]
+    },
+    "table_name": "vips",
+    "sql": "SELECT cid,SUM(amount) AS total FROM orderpay GROUP BY cid ORDER BY total DESC;"
+  }
+}

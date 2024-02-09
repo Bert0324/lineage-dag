@@ -1,10 +1,10 @@
-import type { IAdapter, ISourceData, ITargetData } from "../types";
+import type { IAdapter, ISourceDataV2, ITargetData } from "../types";
 
-export class Adapter implements IAdapter {
-  transfer(source: ISourceData): ITargetData {
+export class AdapterV2 implements IAdapter {
+  transfer(source: ISourceDataV2): ITargetData {
     const data: Partial<ITargetData> = {};
     const keys = Object.keys(source);
-    const cache: Record<string, ISourceData[number]> = {};
+    const cache: Record<string, ISourceDataV2[number]> = {};
     data.tables = keys.map((key) => {
       const columnKeys = Object.keys(source[key].columns);
       cache[source[key].table_name] = source[key];
@@ -18,6 +18,7 @@ export class Adapter implements IAdapter {
         isCollapse: false,
         isExpand: false,
         isShowAllColumns: false,
+        sql: source[key].sql,
       };
     });
     data.relations = [];
@@ -26,7 +27,7 @@ export class Adapter implements IAdapter {
       const item = source[key];
       const tgtTableId = source[key].table_name;
       Object.keys(item.columns).forEach((columnKey) => {
-        const columns = item.columns[columnKey];
+        const columns = Array.from(new Set(item.columns[columnKey].flat(2)));
         const tgtTableColName = columnKey;
         columns.forEach((column) => {
           const arr = column.split(".");

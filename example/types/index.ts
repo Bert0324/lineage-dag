@@ -2,54 +2,79 @@
  * target input data
  */
 export interface ITargetData {
-    tables: {
-        id: string;
-        name: string;
-        fields: {
-            name: string;
-            title: string;
-        }[];
-        /**
-         * columns visible
-         */
-        isCollapse?: boolean;
-        /**
-         * relations visible
-         */
-        isExpand?: boolean;
-        /**
-         * show all columns
-         */
-        isShowAllColumns?: boolean;
+  tables: {
+    id: string;
+    name: string;
+    fields: {
+      name: string;
+      title: string;
     }[];
-    relations: {
-        srcTableId: string;
-        tgtTableId: string;
-        srcTableColName: string;
-        tgtTableColName: string;
-    }[];
+    /**
+     * columns visible
+     */
+    isCollapse?: boolean;
+    /**
+     * relations visible
+     */
+    isExpand?: boolean;
+    /**
+     * show all columns
+     */
+    isShowAllColumns?: boolean;
+  }[];
+  relations: {
+    srcTableId: string;
+    tgtTableId: string;
+    srcTableColName: string;
+    tgtTableColName: string;
+  }[];
 }
 
 /**
  * source output data
  */
 export interface ISourceData {
+  /**
+   * key: table id
+   */
+  [key: string]: {
+    sql?: string;
     /**
-     * key: table id
+     * table
      */
-    [key: string]: {
-        sql?: string;
-        /**
-         * table 
-         */
-        tables: string[];
-        columns: {
-            /**
-             * key: column id
-             */
-            [key: string]: string[];
-        }
-        table_name: string;
-        plan?: Record<string, any>;
+    tables: string[];
+    columns: {
+      /**
+       * key: column id
+       */
+      [key: string]: string[];
     };
+    table_name: string;
+    plan?: Record<string, any>;
+  };
+}
+
+export interface ISourceDataV2 {
+  /**
+   * key: table id
+   */
+  [key: string]: {
+    sql?: string;
+    /**
+     * table
+     */
+    tables: string[];
+    columns: {
+      /**
+       * key: column id
+       */
+      [key: string]: string[][];
+    };
+    table_name: string;
+    plan?: Record<string, any>;
+  };
+}
+
+export interface IAdapter {
+  transfer(source: any): ITargetData;
 }

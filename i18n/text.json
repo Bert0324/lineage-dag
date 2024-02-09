@@ -8,7 +8,9 @@
   "explore": "explore",
   "selectFile": "Select File",
   "crrFile": ", current file: ",
-  "demo": "Demo",
-  "linkText": "Link",
-  "linkValue": "https://www.google.com/"
+  "demo": "Instructions",
+  "linkText": "Github",
+  "linkValue": "https://github.com/sfu-db/lineagex",
+  "demoImage": "https://bert-images.oss-accelerate.aliyuncs.com/images/6f52798e87b1d48733543f11413b712.png",
+  "viewSql": "view sql"
 }
