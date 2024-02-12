@@ -27,6 +27,7 @@ export interface ITargetData {
     tgtTableId: string;
     srcTableColName: string;
     tgtTableColName: string;
+    relationColor?: string;
   }[];
 }
 

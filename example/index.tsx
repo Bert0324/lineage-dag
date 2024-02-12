@@ -10,6 +10,9 @@ import {
   Button,
   message,
   Popover,
+  Dropdown,
+  Menu,
+  Image,
 } from "antd";
 import * as _ from "lodash";
 import LineageDag from "../lib";
@@ -389,10 +392,34 @@ class Com extends React.Component<{}, ITargetData & any> {
                 <Link
                   href={t("linkValue")}
                   target="_blank"
-                  style={{ marginLeft: "20px" }}
+                  style={{ marginLeft: "20px", marginRight: "20px" }}
                 >
                   <Button type="primary">{t("linkText")}</Button>
                 </Link>
+                <Dropdown
+                  overlay={
+                    <Menu>
+                      {t<{ name: string; src: string }[]>("headerDropdown").map(
+                        (item) => {
+                          return (
+                            <Menu.Item key={item.src}>
+                              <Popover
+                                placement="leftTop"
+                                content={
+                                  <Image src={item.src} className="demoImage" />
+                                }
+                              >
+                                {item.name}
+                              </Popover>
+                            </Menu.Item>
+                          );
+                        }
+                      )}
+                    </Menu>
+                  }
+                >
+                  <Button type="primary">{t("headerDropdownText")}</Button>
+                </Dropdown>
               </div>
             </div>
           </Header>

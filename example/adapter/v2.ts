@@ -1,6 +1,19 @@
 import type { IAdapter, ISourceDataV2, ITargetData } from "../types";
+import { t } from "../utils/i18n";
 
 export class AdapterV2 implements IAdapter {
+  private getRelationColorFunc(contributed: string[], referenced: string[]) {
+    return (columnName: string) => {
+      if (contributed.includes(columnName) && referenced.includes(columnName)) {
+        return t("relationColor.both");
+      } else if (contributed.includes(columnName)) {
+        return t("relationColor.contributed");
+      } else if (referenced.includes(columnName)) {
+        return t("relationColor.referenced");
+      }
+    };
+  }
+
   transfer(source: ISourceDataV2): ITargetData {
     const data: Partial<ITargetData> = {};
     const keys = Object.keys(source);
@@ -27,6 +40,11 @@ export class AdapterV2 implements IAdapter {
       const item = source[key];
       const tgtTableId = source[key].table_name;
       Object.keys(item.columns).forEach((columnKey) => {
+        const [contributed, referenced] = item.columns[columnKey];
+        const getRelationColor = this.getRelationColorFunc(
+          contributed,
+          referenced
+        );
         const columns = Array.from(new Set(item.columns[columnKey].flat(2)));
         const tgtTableColName = columnKey;
         columns.forEach((column) => {
@@ -41,6 +59,7 @@ export class AdapterV2 implements IAdapter {
               tgtTableId,
               srcTableColName,
               tgtTableColName,
+              relationColor: getRelationColor(column),
             });
           }
         });

@@ -12,5 +12,21 @@
   "linkText": "Github",
   "linkValue": "https://github.com/sfu-db/lineagex",
   "demoImage": "https://bert-images.oss-accelerate.aliyuncs.com/images/6f52798e87b1d48733543f11413b712.png",
-  "viewSql": "view sql"
+  "viewSql": "view sql",
+  "relationColor": {
+    "contributed": "red",
+    "referenced": "blue",
+    "both": "orange"
+  },
+  "headerDropdownText": "Demos",
+  "headerDropdown": [
+    {
+      "name": "apsiii",
+      "src": "https://bert-images.oss-accelerate.aliyuncs.com/images/apsiii.jpg"
+    },
+    {
+      "name": "charlson",
+      "src": "https://bert-images.oss-accelerate.aliyuncs.com/images/charlson.jpg"
+    }
+  ]
 }
