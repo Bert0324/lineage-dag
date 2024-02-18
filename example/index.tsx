@@ -380,6 +380,34 @@ class Com extends React.Component<{}, ITargetData & any> {
                 <div style={{ marginRight: "20px" }}>{t("title")}</div>
                 <div style={{ marginRight: "20px" }}>{this.getUpload()}</div>
                 {this.getSelect(true)}
+                <Dropdown
+                  overlay={
+                    <div>
+                      <Menu selectable={false} className="menuContainer">
+                      {t<{ name: string; src: string }[]>("headerDropdown").map(
+                        (item) => {
+                          return (
+                            <Popover
+                            placement="leftTop"
+                            content={
+                              <Image src={item.src} className="demoImage" />
+                            }
+                          >
+                            <Menu.Item key={item.src}>
+       
+                                {item.name}
+                     
+                            </Menu.Item>
+                            </Popover>
+                          );
+                        }
+                      )}
+                    </Menu>
+                    </div>
+                  }
+                >
+                  <Button type="primary" style={{ marginLeft: '20px'}}>{t("headerDropdownText")}</Button>
+                </Dropdown>
               </div>
               <div>
                 <Popover
@@ -392,34 +420,10 @@ class Com extends React.Component<{}, ITargetData & any> {
                 <Link
                   href={t("linkValue")}
                   target="_blank"
-                  style={{ marginLeft: "20px", marginRight: "20px" }}
+                  style={{ marginLeft: "20px" }}
                 >
                   <Button type="primary">{t("linkText")}</Button>
                 </Link>
-                <Dropdown
-                  overlay={
-                    <Menu>
-                      {t<{ name: string; src: string }[]>("headerDropdown").map(
-                        (item) => {
-                          return (
-                            <Menu.Item key={item.src}>
-                              <Popover
-                                placement="leftTop"
-                                content={
-                                  <Image src={item.src} className="demoImage" />
-                                }
-                              >
-                                {item.name}
-                              </Popover>
-                            </Menu.Item>
-                          );
-                        }
-                      )}
-                    </Menu>
-                  }
-                >
-                  <Button type="primary">{t("headerDropdownText")}</Button>
-                </Dropdown>
               </div>
             </div>
           </Header>

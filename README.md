@@ -1,4 +1,34 @@
 
+## Start
+
+- Required: nvm
+
+### Installation
+
+```shell
+nvm use 16
+npm i -g yarn
+yarn
+cd example
+yarn
+```
+
+### Development
+
+```shell
+cd example
+yarn start
+```
+
+### Build
+
+```shell
+cd example
+yarn build # ./dist
+```
+
+## Files
+
 ```ts
 .
 ├── LICENSE
