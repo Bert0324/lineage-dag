@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { debounce } from "lodash";
 import { BrowserRouter as Router } from "react-router-dom";
 import {
   Layout,
@@ -296,6 +297,21 @@ class Com extends React.Component<{}, ITargetData & any> {
   }
 
   getSelect(change?: boolean) {
+    // Debounce the onSearch function to improve performance
+    const debouncedSearch = debounce((searchValue) => {
+      const options = this.state.tables
+        .filter((table) => (table.name as string).includes(searchValue))
+        .map((table) => table.name);
+      this.setState({
+        options,
+      });
+    }, 300); // Adjust the debounce delay as needed (e.g., 300 milliseconds)
+  
+    // Initialize the options array with more items when the search bar is clicked
+    const initialOptions = this.state.tables
+      .slice(0, 100) // Adjust the slice value as needed to show more items initially
+      .map((table) => table.name);
+  
     return (
       <Select
         style={{
@@ -304,14 +320,16 @@ class Com extends React.Component<{}, ITargetData & any> {
         value={this.state.initTable?.id}
         placeholder="search table name"
         showSearch
-        onSearch={(v) => {
-          const options = this.state.tables
-            .filter((table) => (table.name as string).includes(v))
-            .map((table) => table.name)
-            .slice(0, 100);
-          this.setState({
-            options,
-          });
+        defaultActiveFirstOption={true} // Set defaultActiveFirstOption to true
+        onDropdownVisibleChange={(open) => {
+          if (open) {
+            this.setState({
+              options: initialOptions,
+            });
+          }
+        }}
+        onSearch={(value) => {
+          debouncedSearch(value);
         }}
         onChange={(v) => {
           const initTable = this.state.tables.find((table) => table.name === v);
@@ -339,7 +357,7 @@ class Com extends React.Component<{}, ITargetData & any> {
       </Select>
     );
   }
-
+  
   getUpload() {
     return (
       <Upload
